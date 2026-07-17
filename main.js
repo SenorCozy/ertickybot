@@ -860,7 +860,7 @@ app.delete(
 );
 
 // ✅ View Individual Transcript
-app.get("/transcripts/:id", async (req, res) => {
+app.get("/transcripts/:id", ensureAuthenticated, checkModeratorRole, async (req, res) => {
   try {
     const transcriptId = req.params.id;
 
@@ -931,6 +931,11 @@ app.get(
     }
   }
 );
+
+// ✅ Public Privacy Policy (no auth — must be readable by anyone, incl. Discord's review)
+app.get("/privacy", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "privacy.html"));
+});
 
 // ✅ Logout Route
 app.get("/logout", (req, res) => {
