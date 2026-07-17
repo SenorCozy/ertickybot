@@ -22,7 +22,6 @@ const {
   activeQuickUnclaimButtons,
 } = require("../claimHelper");
 
-const clearConversationHistory = require("../clearConversationHistory");
 // Platform-specific helper role IDs
 const PLATFORM_HELPER_ROLES = {
   platform_ps: process.env.PLATFORM_HELPER_PS,
@@ -1796,15 +1795,6 @@ async function closeTicket({
             } catch (e) {
               console.error("⚠️ Could not post transcript log:", e);
             }
-
-            // --- clean state ---
-            clearConversationHistory(ticket.id, (clearErr) => {
-              if (clearErr)
-                console.error(
-                  "❌ Error clearing conversation history:",
-                  clearErr
-                );
-            });
 
             // Mark closed BEFORE attempting the channel delete, so the row is
             // out of `status='open'` queries (idle check, dashboard) even if

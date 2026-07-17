@@ -30,7 +30,6 @@ const {
 } = require("./database");
 const marked = require("marked");
 const he = require("he");
-const clearConversationHistory = require("./clearConversationHistory");
 
 // Remove all existing listeners for the interactionCreate event
 client.removeAllListeners("interactionCreate");
@@ -671,39 +670,6 @@ app.get(
           }
         );
       });
-      // ✅ Fetch AI stats for snapshot
-      const aiStats = await new Promise((resolve) => {
-        db.get(
-          `SELECT 
-      COUNT(*) as total_prompts,
-      AVG(prompt_length) as avg_prompt_length,
-      AVG(response_time_ms) as avg_response_time_ms,
-      SUM(CASE WHEN success = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) as success_rate,
-      SUM(CASE WHEN fallback_used = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*) as fallback_rate
-    FROM ai_logs`,
-          (err, row) => {
-            if (err) {
-              console.error("❌ Error fetching AI stats:", err);
-              resolve({
-                total_prompts: 0,
-                avg_prompt_length: 0,
-                avg_response_time_ms: 0,
-                success_rate: 0,
-                fallback_rate: 0,
-              });
-            } else {
-              resolve({
-                total_prompts: row.total_prompts,
-                avg_prompt_length: Math.round(row.avg_prompt_length || 0),
-                avg_response_time_ms: Math.round(row.avg_response_time_ms || 0),
-                success_rate: (row.success_rate || 0).toFixed(1),
-                fallback_rate: (row.fallback_rate || 0).toFixed(1),
-              });
-            }
-          }
-        );
-      });
-
       // ✅ Fetch recent transcripts
       const transcripts = await new Promise((resolve, reject) => {
         db.all(
@@ -723,50 +689,11 @@ app.get(
         transcripts,
         botAvatar,
         botName,
-        aiStats,
       });
     } catch (error) {
       console.error("❌ Error loading dashboard:", error);
       res.redirect("/auth/discord");
     }
-  }
-);
-
-//ai-health route
-
-app.get(
-  "/ai-health",
-  ensureAuthenticated,
-  checkModeratorRole,
-  async (req, res) => {
-    db.all(
-      `SELECT 
-      id, user_id, ticket_id, model_used, fallback_used,
-      prompt_length, response_time_ms, success, error_message, tokens_estimated,
-      timestamp
-     FROM ai_logs
-     ORDER BY timestamp DESC LIMIT 100`,
-      (err, logs) => {
-        if (err) {
-          console.error("❌ Error loading AI health logs:", err);
-          return res.status(500).send("Internal error");
-        }
-
-        const successCount = logs.filter((log) => log.success).length;
-        const failCount = logs.length - successCount;
-        const fallbackCount = logs.filter((log) => log.fallback_used).length;
-        const directSuccessCount = logs.length - fallbackCount;
-
-        res.render("ai-health", {
-          user: req.user,
-          logs,
-          successCount,
-          failCount,
-          fallbackCount,
-          directSuccessCount,
-        });
-      }
-    );
   }
 );
 
@@ -1211,11 +1138,6 @@ app.post("/close/:id", async (req, res) => {
 
         // Final DB update and cleanup
         try {
-          clearConversationHistory(ticket.id, (err) => {
-            if (err)
-              console.error("❌ Error clearing conversation history:", err);
-          });
-
           db.run(
             "UPDATE tickets SET status = 'closed' WHERE id = ?",
             [ticketId],

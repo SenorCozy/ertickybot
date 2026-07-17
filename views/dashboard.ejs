@@ -82,23 +82,6 @@
       <p style="text-align: center">
         <a href="/transcripts">🔗 View All Transcripts</a>
       </p>
-      <!-- 🔍 AI Usage Snapshot -->
-      <h2>🧠 AI Health Snapshot</h2>
-      <div class="status-box">
-        <div class="status-text">
-          <h3>Current AI Usage Stats</h3>
-          <div class="status-grid">
-            <div><strong>Prompts Sent:</strong> <%= aiStats.total_prompts %></div>
-            <div><strong>Avg Prompt Length:</strong> <%= aiStats.avg_prompt_length %> chars</div>
-            <div><strong>Avg Response Time:</strong> <%= aiStats.avg_response_time_ms %> ms</div>
-            <div><strong>Success Rate:</strong> <%= aiStats.success_rate %> %</div>
-            <div><strong>Fallback Usage:</strong> <%= aiStats.fallback_rate %> %</div>
-          </div>
-          <p style="margin-top: 10px">
-            <a href="/ai-health" class="transcript-view">🔍 View Full AI Health</a>
-          </p>
-        </div>
-      </div>
     </div>
 
     <script>
