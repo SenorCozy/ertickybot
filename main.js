@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Client, GatewayIntentBits, Collection, Events } = require("discord.js");
 // ✅ Initialize Discord Bot
 const client = new Client({
@@ -141,8 +142,6 @@ const {
   ChannelType,
   PermissionsBitField,
 } = require("discord.js");
-
-require("dotenv").config();
 
 client.commands = new Collection();
 client.buttons = new Collection();
