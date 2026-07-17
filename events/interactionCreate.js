@@ -2,6 +2,7 @@ const { db, addUniqueUser, incrementTicketPlatform } = require("../database");
 require("dotenv").config();
 const marked = require("marked");
 const he = require("he");
+const { encryptText } = require("../crypto");
 const {
   ActionRowBuilder,
   ButtonBuilder,
@@ -1718,7 +1719,7 @@ async function closeTicket({
                   msg.user_id,
                   msg.username,
                   msg.avatar,
-                  msg.content,
+                  encryptText(msg.content),
                   msg.timestamp,
                   msg.attachments,
                   msg.embeds,

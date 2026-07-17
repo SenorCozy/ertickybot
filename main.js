@@ -30,6 +30,7 @@ const {
 } = require("./database");
 const marked = require("marked");
 const he = require("he");
+const { encryptText, decryptText } = require("./crypto");
 
 // Remove all existing listeners for the interactionCreate event
 client.removeAllListeners("interactionCreate");
@@ -888,9 +889,9 @@ app.get("/transcripts/:id", ensureAuthenticated, checkModeratorRole, async (req,
         (err, rows) => {
           if (err) reject(err);
           else {
-            // Decode HTML entities before passing to EJS
+            // Decrypt stored message text, then decode HTML entities before passing to EJS
             rows.forEach((row) => {
-              row.message = he.decode(row.message);
+              row.message = he.decode(decryptText(row.message));
             });
             resolve(rows);
           }
@@ -1056,7 +1057,7 @@ app.post("/close/:id", async (req, res) => {
                   msg.user_id,
                   msg.username,
                   msg.avatar,
-                  msg.content,
+                  encryptText(msg.content),
                   msg.timestamp,
                   msg.attachments,
                   msg.embeds,
