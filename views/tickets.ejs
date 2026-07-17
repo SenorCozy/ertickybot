@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticket Dashboard</title>
+    <link rel="stylesheet" href="/tickets.css" />
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <ul>
+        <li><a href="/dashboard">🏠 Dashboard</a></li>
+        <li><a href="/tickets">🎟️ Tickets</a></li>
+        <li><a href="/transcripts">📜 Transcripts</a></li>
+        <li><a href="/botlog">📑 Bot Logs</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>🎟️ Ticket Dashboard</h1>
+
+      <table class="ticket-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ticket Creator</th>
+            <th>Created At</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tickets.forEach((ticket, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= ticket.username %></td>
+            <td><%= new Date(ticket.created_at).toLocaleString() %></td>
+            <td><%= ticket.status %></td>
+            <td>
+              <button
+                class="btn btn-danger force-close-btn"
+                data-ticket-id="<%= ticket.id %>"
+              >
+                Force Close
+              </button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const forceCloseButtons = document.querySelectorAll(".force-close-btn");
+
+        forceCloseButtons.forEach((button) => {
+          button.addEventListener("click", async function () {
+            const ticketId = this.getAttribute("data-ticket-id");
+
+            // Confirm before closing
+            const confirmClose = confirm(
+              "Are you sure you want to force close this ticket?"
+            );
+            if (!confirmClose) return;
+
+            try {
+              const response = await fetch(`/close/${ticketId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+              });
+
+              const data = await response.json();
+
+              if (response.ok) {
+                // Show success message
+                alert("✅ Ticket closed successfully!");
+
+                // Remove the ticket row from the table (hide it dynamically)
+                this.closest("tr").remove();
+              } else {
+                // Show error message
+                alert(`❌ Error: ${data.message}`);
+              }
+            } catch (error) {
+              console.error("❌ Force close request failed:", error);
+              alert("❌ Something went wrong. Please try again.");
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

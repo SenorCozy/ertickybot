@@ -1,0 +1,242 @@
+/* General Styles */
+body {
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(to bottom, #1e1e2e, #141414, #0a0a0a);
+  background-size: cover; /* Ensures it covers the whole page */
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* Prevents unnecessary repeats */
+}
+.transcripts-container {
+  background: rgba(
+    30,
+    30,
+    40,
+    0.9
+  ); /* Slightly dark semi-transparent background */
+  padding: 20px;
+  border-radius: 10px; /* Smooth rounded corners */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6); /* Subtle shadow for elevation */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Optional: Slight row highlight effect on hover */
+.transcript-table tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Slight highlight on hover */
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Adding smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+/*********************
+ * Backup Button Styling 
+ *********************/
+.backup-btn {
+  display: inline-flex;
+  align-items: center;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none;
+}
+
+.backup-btn:hover {
+  background-color: #0056b3;
+}
+
+.backup-btn i {
+  margin-right: 8px;
+}
+
+.backup-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Container */
+.container {
+  width: 80%;
+  max-width: 900px;
+}
+
+/* Page Header */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+/* Transcripts Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #282a36;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+th {
+  background-color: #44475a;
+  color: #fff;
+}
+
+tr:hover {
+  background-color: rgba(50, 52, 63, 0.9); /* Slightly lighter hover effect */
+  transition: background 0.3s ease-in-out;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+.page-number {
+  font-weight: bold;
+  color: #f8f8f8;
+  background: rgba(50, 52, 63, 0.8);
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+.pagination-button {
+  text-decoration: none;
+  background: #3b82f6;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.pagination-button:hover {
+  background: #2563eb;
+}
+
+/* View Transcript Button */
+.transcript-view {
+  text-decoration: none;
+  color: #3b82f6;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.transcript-view:hover {
+  color: #60a5fa;
+}
+
+/* 🌟 Modern Navigation Bar */
+.navbar {
+  background-color: #2b2d42;
+  padding: 15px 0;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  position: fixed; /* Fix navbar on top */
+  width: 100%; /* Make it stretch across the page */
+  top: 0;
+  z-index: 1000;
+  background-color: rgba(43, 45, 66, 0.95); /* Slight transparency */
+  transition: background-color 0.3s ease-in-out;
+}
+.container {
+  margin-top: 80px; /* Push content below fixed navbar */
+  width: 80%;
+  max-width: 900px;
+}
+
+/* 🌟 Navbar List Styling */
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 25px; /* Spacing between links */
+}
+
+/* 🌟 Navbar Links */
+.navbar ul li {
+  display: inline;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* 🟢 Active Page Highlight */
+.navbar ul li a.active,
+.navbar ul li a:hover {
+  background-color: #3b3f5e; /* Slightly lighter blue-gray */
+  color: #f0db4f; /* Yellow pop color */
+  text-shadow: 0px 0px 5px rgba(255, 223, 88, 0.8);
+}
+
+/* Style the action buttons container */
+.action-buttons {
+  display: flex;
+  gap: 15px; /* Adds spacing between View and Delete buttons */
+  align-items: center;
+}
+
+/* 📱 Mobile Responsiveness */
+@media (max-width: 768px) {
+  .navbar ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+body {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.transcript-view {
+  text-decoration: none;
+  color: #3b82f6;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.transcript-view:hover {
+  color: #60a5fa;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 3px 8px;
+}

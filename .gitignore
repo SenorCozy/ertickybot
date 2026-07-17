@@ -1,0 +1,30 @@
+# --- Secrets: NEVER commit ---
+.env
+.env.*
+!.env.example
+
+# --- Dependencies ---
+node_modules/
+
+# --- Database & user data: NEVER commit ---
+database/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# --- Logs & runtime ---
+*.log
+bot.lock
+bot.log
+error.log
+config.json
+
+# --- Cloudflare IP lists (regenerated on server) ---
+cf-ips-v4.txt
+cf-ips-v6.txt
+
+# --- OS cruft ---
+.DS_Store
+Thumbs.db

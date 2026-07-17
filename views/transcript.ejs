@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transcript - Ticket <%= transcript.ticket_id %></title>
+    <!-- Styles -->
+    <link rel="stylesheet" href="/transcript.css" />
+
+    <!-- Libraries for markdown parsing and HTML entity decoding -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/he/he.js"></script>
+  </head>
+
+  <body>
+    <!-- Simple Navbar -->
+    <nav class="navbar">
+      <ul>
+        <li><a href="/dashboard">🏠 Dashboard</a></li>
+        <li><a href="/tickets">🎟️ Tickets</a></li>
+        <li><a href="/transcripts">📜 Transcripts</a></li>
+        <li><a href="/botlog">📑 Bot Logs</a></li>
+      </ul>
+    </nav>
+
+    <div class="transcript-container">
+      <h2>📜 Transcript for Ticket <%= transcript.ticket_id %></h2>
+
+      <!-- Ticket Meta Info -->
+      <div class="ticket-meta">
+        <p>
+          <strong>Opened By:</strong> <%= transcript.username %> (<%=
+          transcript.user_id %>)
+        </p>
+        <p><strong>Closed By:</strong> <%= transcript.closed_by_username %></p>
+        <p>
+          <strong>Closure Reason:</strong>
+          <%= transcript.closure_reason || "No reason provided" %>
+        </p>
+      </div>
+
+      <hr />
+
+      <!-- Messages Container -->
+      <div class="messages-container">
+        <% messages.forEach(message => { %>
+        <div class="message">
+          <!-- User Avatar -->
+          <img class="avatar" src="<%= message.avatar_url %>" alt="Avatar" />
+          <div class="message-content">
+            <!-- Username & Timestamp -->
+            <div class="message-header">
+              <span class="username">
+                <%= message.username %> (<%= message.user_id %>)</span
+              >
+              <span class="timestamp">
+                <%= new Date(message.timestamp).toLocaleString() %>
+              </span>
+            </div>
+
+            <!-- Message Text (Markdown-decoded) -->
+            <div class="content markdown-content">
+              <%- message.message ?
+              marked.parse(he.decode(he.decode(message.message))) : "" %>
+            </div>
+
+            <!-- Attachments -->
+            <% if (message.attachment_url && message.attachment_url !== "null")
+            { %>
+            <div class="attachments">
+              <% try { const attachments = JSON.parse(message.attachment_url);
+              attachments.forEach(url => { %>
+              <img
+                src="<%= url.trim() %>"
+                class="attachment-img"
+                onerror="this.style.display='none'"
+              />
+              <% }); } catch (error) { %>
+              <p class="error-message">⚠️ (Attachment unavailable)</p>
+              <% } %>
+            </div>
+            <% } %>
+
+            <!-- Embeds -->
+            <% if (message.embed_data) { let embeds = []; try { embeds =
+            JSON.parse(message.embed_data); } catch (err) { embeds = []; }
+            embeds.forEach(embed => { %>
+            <div class="embed-container force-wrap no-overflow hyphenate">
+              <div class="embed-header">
+                <strong class="embed-title">
+                  <%- embed.title ? he.decode(embed.title) : "Embed" %>
+                </strong>
+              </div>
+              <div class="embed-content">
+                <p class="embed-description markdown-content">
+                  <%- embed.description ?
+                  marked.parse(he.decode(embed.description)) : "" %>
+                </p>
+              </div>
+
+              <% if (embed.thumbnail) { %>
+              <img class="embed-thumbnail" src="<%= embed.thumbnail.url %>" />
+              <% } %>
+            </div>
+            <% }); %> <% } %>
+
+            <!-- Reactions (Optional) -->
+            <!-- ✅ Reactions Handling -->
+            <% if (message.reactions) { %> <% let reactions; try { reactions =
+            JSON.parse(message.reactions); } catch (err) { reactions = []; } %>
+            <div class="reactions">
+              <% reactions.forEach(r => { %>
+              <span class="reaction"><%= r.emoji %> x<%= r.count %></span>
+              <% }); %>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- Script to parse markdown on the client side after decode -->
+  </body>
+</html>

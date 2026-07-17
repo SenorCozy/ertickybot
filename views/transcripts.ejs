@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transcripts</title>
+    <link rel="stylesheet" href="/transcripts.css" />
+  </head>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="/dashboard">🏠 Dashboard</a></li>
+      <li><a href="/tickets">🎟️ Tickets</a></li>
+      <li><a href="/transcripts">📜 Transcripts</a></li>
+      <li><a href="/botlog">📑 Bot Logs</a></li>
+    </ul>
+  </nav>
+
+  <body>
+    <div class="container">
+      <h1>📜 Ticket Transcripts</h1>
+      <div class="backup-container">
+        <button class="backup-btn" onclick="backupDatabase()">
+          📂 Backup Database
+        </button>
+      </div>
+
+      <div class="transcripts-container">
+        <table class="transcript-table">
+          <tr>
+            <th>#</th>
+            <th>Opened By</th>
+            <th>Closed By</th>
+            <th>Closed At</th>
+            <th>View</th>
+          </tr>
+          <% transcripts.forEach((transcript, index) => { %>
+          <tr>
+            <td><%= transcript.number %></td>
+            <td><%= transcript.username %></td>
+            <td><%= transcript.closed_by_username %></td>
+            <td><%= new Date(transcript.closed_at).toLocaleString() %></td>
+            <td class="action-buttons">
+              <a
+                href="/transcripts/<%= transcript.id %>"
+                class="transcript-view"
+              >
+                🔎 <span class="view-text">View</span>
+              </a>
+              <button class="delete-transcript" data-id="<%= transcript.id %>">
+                🗑️ Delete
+              </button>
+            </td>
+          </tr>
+          <% }) %>
+        </table>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="pagination">
+        <% if (page > 1) { %>
+        <a href="/transcripts?page=<%= page - 1 %>" class="pagination-button"
+          >⬅️ Previous</a
+        >
+        <% } %>
+
+        <span class="page-number">Page <%= page %> of <%= totalPages %></span>
+
+        <% if (page < totalPages) { %>
+        <a href="/transcripts?page=<%= page + 1 %>" class="pagination-button"
+          >Next ➡️</a
+        >
+        <% } %>
+      </div>
+    </div>
+    <script>
+      document.querySelectorAll(".delete-transcript").forEach((button) => {
+        button.addEventListener("click", async (event) => {
+          const transcriptId = event.target.getAttribute("data-id").trim(); // Ensure ID is properly formatted
+          console.log(
+            `🗑️ Sending delete request for transcript ID: "${transcriptId}"`
+          );
+
+          if (!transcriptId) {
+            alert("❌ Transcript ID is missing.");
+            return;
+          }
+
+          if (
+            !confirm(
+              "⚠️ Are you sure you want to delete this transcript? This action cannot be undone."
+            )
+          )
+            return;
+
+          try {
+            const response = await fetch(
+              `/transcripts/${encodeURIComponent(transcriptId)}`,
+              {
+                method: "DELETE",
+              }
+            );
+
+            if (response.ok) {
+              alert("✅ Transcript deleted successfully.");
+              location.reload(); // Refresh page to update the list
+            } else {
+              const errorText = await response.text();
+              alert(`❌ Failed to delete transcript: ${errorText}`);
+            }
+          } catch (error) {
+            console.error("❌ Error deleting transcript:", error);
+            alert("❌ An unexpected error occurred.");
+          }
+        });
+      });
+    </script>
+    <script>
+      async function backupDatabase() {
+        try {
+          const response = await fetch("/backup", { method: "POST" });
+
+          if (response.ok) {
+            alert("✅ Database backup created successfully!");
+          } else {
+            alert("❌ Failed to create database backup.");
+          }
+        } catch (error) {
+          console.error("❌ Error initiating database backup:", error);
+          alert("❌ Error connecting to the server.");
+        }
+      }
+    </script>
+  </body>
+</html>

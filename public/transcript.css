@@ -1,0 +1,452 @@
+/* Global Styles */
+body {
+  font-family: "Inter", sans-serif;
+  background: #2b2d31; /* Discord-like dark background */
+  color: #dcddde;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Navbar */
+.navbar {
+  background: #23272a;
+  padding: 15px 0;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.navbar ul li {
+  flex: 1 1 40%;
+  text-align: center;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 15px;
+  transition: 0.3s;
+}
+
+.navbar ul li a:hover {
+  background: #3b3f5e;
+  color: #f0db4f;
+  border-radius: 5px;
+}
+
+/* Transcript Container */
+.transcript-container {
+  max-width: 800px;
+  width: 90%;
+  box-sizing: border-box;
+  background: #36393f;
+  padding: 20px;
+  margin-top: 80px;
+  border-radius: 8px;
+  overflow-wrap: break-word;
+}
+
+/* Ticket Meta */
+.ticket-meta {
+  background: #2f3136;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.ticket-meta p {
+  margin: 5px 0;
+}
+
+/* Messages */
+.messages-container {
+  margin-top: 1px;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  padding: 8px;
+  border-bottom: 1px solid #40444b;
+  gap: 8px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.message-content {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.username {
+  font-weight: bold;
+  color: #7289da;
+  font-size: 14px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* Message Text */
+.markdown-content p {
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Attachments */
+.attachments img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+/* Embeds */
+.embed-container {
+  background: #2f3136;
+  border-left: 4px solid #faa61a;
+  padding: 12px;
+  border-radius: 5px;
+  margin: 10px 0;
+  max-width: 100%;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  box-sizing: border-box;
+}
+
+.embed-title {
+  font-weight: bold;
+  color: #ffcc00;
+  font-size: 1rem;
+}
+
+.embed-description {
+  font-size: 0.95em;
+  color: #ccc;
+  margin-top: 5px;
+}
+
+.embed-thumbnail {
+  max-width: 120px;
+  border-radius: 5px;
+  margin-top: 5px;
+  display: block;
+}
+
+.embed-header {
+  margin-bottom: 8px;
+}
+
+.embed-content {
+  font-size: 0.95em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+.embed-content strong {
+  font-weight: 600;
+}
+
+/* Special case for the example sections */
+.embed-example {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  border-radius: 5px;
+  margin: 8px 0;
+  border-left: 3px solid #faa61a;
+}
+/* Reactions */
+.reactions {
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+.reaction {
+  display: inline-block;
+  margin-right: 5px;
+  padding: 3px 6px;
+  background: #40444b;
+  border-radius: 5px;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.error-message {
+  color: #ff6b6b;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.force-wrap {
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+}
+
+.no-overflow {
+  overflow: hidden;
+}
+
+.hyphenate {
+  hyphens: auto;
+}
+/* --- MOBILE STYLES --- */
+
+@media (max-width: 600px) {
+  .transcript-container {
+    width: 98%; /* Increase from 95% to use more space */
+    max-width: 100%;
+    margin-top: 70px; /* Slightly reduce to use more vertical space */
+    padding: 8px; /* Reduce padding further */
+    box-sizing: border-box;
+  }
+
+  .message {
+    flex-direction: row; /* Keep messages in row layout */
+    align-items: flex-start;
+    padding: 8px 4px; /* Reduce padding */
+    gap: 6px;
+  }
+
+  .message-content {
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    overflow: hidden; /* Prevent content overflow */
+  }
+
+  .content {
+    font-size: 14px;
+    word-break: break-word;
+    line-height: 1.4;
+    overflow-wrap: anywhere; /* Better word breaking */
+  }
+
+  .avatar {
+    width: 32px; /* Slightly larger than previous mobile size */
+    height: 32px;
+    min-width: 32px; /* Prevent shrinking */
+    margin-bottom: 0;
+  }
+
+  .message-header {
+    flex-direction: row; /* Keep header in row layout */
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap; /* Allow wrapping if needed */
+  }
+
+  .username {
+    font-size: 14px;
+  }
+
+  .timestamp {
+    font-size: 12px;
+  }
+
+  /* Add these new rules for better mobile handling */
+  body {
+    padding: 0 5px; /* Small padding to prevent edge touching */
+  }
+
+  .ticket-meta {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .embed-container {
+    padding: 12px 10px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+
+  .attachment-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 5px;
+  }
+
+  .error-message {
+    font-size: 0.8em;
+  }
+  /* New styles for embed/info sections */
+
+  .embed-title {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .embed-description {
+    font-size: 13px;
+  }
+
+  /* Enhanced embed text handling */
+  .embed-container {
+    max-width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    hyphens: auto; /* Enable hyphenation for long words */
+  }
+
+  /* Force line breaks before long words */
+  .embed-content * {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: normal !important;
+  }
+
+  /* Better handling for lists */
+  .embed-content ul,
+  .embed-content ol {
+    padding-left: 20px;
+    margin: 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .embed-content li {
+    position: relative;
+    padding-left: 8px;
+    page-break-inside: avoid;
+    break-inside: avoid-column;
+  }
+
+  /* Special handling for long unbroken strings (like Discord IDs) */
+  .embed-content p,
+  .embed-content strong {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* Fix for Discord mentions/IDs */
+  .embed-container [class*="mention"] {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    vertical-align: bottom;
+    word-break: break-all;
+  }
+
+  /* Ensure bullet points don't overflow */
+  .embed-content li::before {
+    position: absolute;
+    left: -8px;
+  }
+
+  /* Special case for the example sections */
+  .embed-example {
+    padding: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* Arrow character fix */
+  .embed-content .arrow {
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  /* Prevent text cutoff */
+  .embed-content p {
+    margin: 5px 0;
+    word-break: break-word;
+  }
+  /* Fix for bold text wrapping */
+  .embed-content strong {
+    display: inline;
+  }
+
+  /* Handle long unbroken strings */
+  .embed-content p {
+    margin: 6px 0;
+  }
+
+  /* Special treatment for example sections */
+  .embed-example {
+    padding: 10px;
+    font-size: 13px;
+    overflow: hidden;
+  }
+
+  /* Discord mention handling */
+  [class*="mention"] {
+    display: inline-block;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+  }
+}

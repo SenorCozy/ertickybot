@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/dashboard.css" />
+  </head>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="/dashboard">🏠 Dashboard</a></li>
+      <li><a href="/tickets">🎟️ Tickets</a></li>
+      <li><a href="/transcripts">📜 Transcripts</a></li>
+      <li><a href="/botlog">📑 Bot Logs</a></li>
+    </ul>
+  </nav>
+
+  <body>
+    <div class="container">
+      <h1>Elden Ring Ticket Bot Dashboard</h1>
+      <p style="text-align: center">
+        Welcome, <strong><%= user.username %></strong>!
+      </p>
+
+      <!-- Bot Status Section -->
+      <div class="status-box">
+        <img src="<%= botAvatar %>" alt="Bot Avatar" class="bot-avatar" />
+        <div class="status-text">
+          <h2><%= botName %></h2>
+          <p class="status-indicator">🟢 Online</p>
+
+          <!-- Use a grid layout for better readability -->
+          <div class="status-grid">
+            <div>
+              <strong>Uptime:</strong> <%= Math.floor(botStatus.uptime / 3600)
+              %> hours, <%= Math.floor((botStatus.uptime % 3600) / 60) %>
+              minutes
+            </div>
+            <div><strong>Open Tickets:</strong> <%= activeTickets %></div>
+            <div><strong>Servers:</strong> <%= botStatus.serverCount %></div>
+            <div><strong>Users:</strong> <%= botStatus.userCount %></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button class="control-btn restart-btn" onclick="restart()">
+          🔄 Restart Bot
+        </button>
+        <button class="control-btn backup-btn" onclick="backupDatabase()">
+          📂 Backup Database
+        </button>
+      </div>
+
+      <!-- Recent Transcripts -->
+      <h2>📜 Recent Transcripts</h2>
+      <table>
+        <tr>
+          <th>Transcript ID</th>
+          <th>Opened By</th>
+          <th>Closed By</th>
+          <th>Closed At</th>
+          <th>View</th>
+        </tr>
+        <% transcripts.forEach(transcript => { %>
+        <tr>
+          <td><%= transcript.id %></td>
+          <td><%= transcript.username %></td>
+          <td><%= transcript.closed_by_username %></td>
+          <td><%= new Date(transcript.closed_at).toLocaleString() %></td>
+          <td>
+            <a href="/transcripts/<%= transcript.id %>" class="transcript-view"
+              >🔍 View</a
+            >
+          </td>
+        </tr>
+        <% }) %>
+      </table>
+
+      <p style="text-align: center">
+        <a href="/transcripts">🔗 View All Transcripts</a>
+      </p>
+      <!-- 🔍 AI Usage Snapshot -->
+      <h2>🧠 AI Health Snapshot</h2>
+      <div class="status-box">
+        <div class="status-text">
+          <h3>Current AI Usage Stats</h3>
+          <div class="status-grid">
+            <div><strong>Prompts Sent:</strong> <%= aiStats.total_prompts %></div>
+            <div><strong>Avg Prompt Length:</strong> <%= aiStats.avg_prompt_length %> chars</div>
+            <div><strong>Avg Response Time:</strong> <%= aiStats.avg_response_time_ms %> ms</div>
+            <div><strong>Success Rate:</strong> <%= aiStats.success_rate %> %</div>
+            <div><strong>Fallback Usage:</strong> <%= aiStats.fallback_rate %> %</div>
+          </div>
+          <p style="margin-top: 10px">
+            <a href="/ai-health" class="transcript-view">🔍 View Full AI Health</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function restart() {
+        try {
+          const response = await fetch("/restart", { method: "POST" });
+
+          if (response.ok) {
+            alert("✅ Bot is restarting...");
+          } else {
+            alert("❌ Failed to restart the bot.");
+          }
+        } catch (error) {
+          console.error("❌ Error sending restart request:", error);
+          alert("❌ Error connecting to the server.");
+        }
+      }
+    </script>
+    <script>
+      async function backupDatabase() {
+        try {
+          const response = await fetch("/backup", { method: "POST" });
+
+          if (response.ok) {
+            alert("✅ Database backup created successfully!");
+          } else {
+            alert("❌ Failed to create database backup.");
+          }
+        } catch (error) {
+          console.error("❌ Error initiating database backup:", error);
+          alert("❌ Error connecting to the server.");
+        }
+      }
+    </script>
+  </body>
+</html>

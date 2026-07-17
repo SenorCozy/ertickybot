@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bot Logs</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/botlog.css" />
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <ul>
+        <li><a href="/dashboard">🏠 Dashboard</a></li>
+        <li><a href="/tickets">🎟️ Tickets</a></li>
+        <li><a href="/transcripts">📜 Transcripts</a></li>
+        <li><a href="/botlog" class="active">📑 Bot Logs</a></li>
+      </ul>
+    </nav>
+
+    <!-- Page Header -->
+    <h1>📜 Live Bot Logs</h1>
+
+    <div class="logs-wrapper">
+      <!-- General Log Container -->
+      <div class="log-container auto-scroll" id="logContainer">
+        <h3>📝 General Logs</h3>
+        <div id="generalLogContent">Loading logs...</div>
+      </div>
+
+      <!-- Error Log Container -->
+      <div class="error-log-box auto-scroll">
+        <h3>❌ Error Logs</h3>
+        <div id="errorLogContainer">No errors yet...</div>
+      </div>
+    </div>
+
+    <!-- WebSocket for Real-Time Logs -->
+    <script>
+      const socket = io();
+
+      function escapeHTML(html) {
+        return html.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
+      function appendLog(message, type = "log") {
+        const logContainer =
+          type === "error"
+            ? document.getElementById("errorLogContainer")
+            : document.getElementById("generalLogContent");
+
+        const logMessage = document.createElement("div");
+        logMessage.className = type === "error" ? "error-log" : "general-log";
+
+        logMessage.innerHTML = `<pre>${escapeHTML(message)}</pre>`;
+        logContainer.appendChild(logMessage);
+
+        // Auto-scroll
+        logContainer.parentElement.scrollTop = logContainer.scrollHeight;
+      }
+
+      socket.on("logUpdate", (message) => appendLog(message));
+      socket.on("errorLogUpdate", (message) => appendLog(message, "error"));
+    </script>
+  </body>
+</html>

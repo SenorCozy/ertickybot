@@ -1,0 +1,191 @@
+/* General Styles */
+body {
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(to bottom, #1e1e2e, #141414, #0a0a0a);
+  background-size: cover; /* Ensures it covers the whole page */
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh; /* Prevents unnecessary repeats */
+}
+
+/* Container */
+.container {
+  width: 80%;
+  max-width: 900px;
+}
+
+/* Page Header */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+/* Transcripts Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #282a36;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+th {
+  background-color: #44475a;
+  color: #fff;
+}
+
+tr:hover {
+  background-color: #32343f;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination-button {
+  background: #3b82f6;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
+}
+
+.pagination-button:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+
+.ticket-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #282a36;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ticket-table th,
+.ticket-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.ticket-table th {
+  background-color: #44475a;
+  color: #fff;
+  font-size: 16px;
+}
+
+.ticket-table tr:hover {
+  background-color: #3b3f5e;
+}
+
+/* 🌟 Modern Navigation Bar */
+.navbar {
+  background-color: #2b2d42;
+  padding: 15px 0;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  position: fixed; /* Fix navbar on top */
+  width: 100%; /* Make it stretch across the page */
+  top: 0;
+  z-index: 1000;
+}
+.container {
+  margin-top: 80px; /* Push content below fixed navbar */
+  width: 80%;
+  max-width: 900px;
+}
+
+/* 🌟 Navbar List Styling */
+.navbar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 25px; /* Spacing between links */
+}
+
+/* 🌟 Navbar Links */
+.navbar ul li {
+  display: inline;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* 🟢 Active Page Highlight */
+.navbar ul li a.active,
+.navbar ul li a:hover {
+  background-color: #3b3f5e; /* Slightly lighter blue-gray */
+  color: #f0db4f; /* Yellow pop color */
+  text-shadow: 0px 0px 5px rgba(255, 223, 88, 0.8);
+}
+
+/* 📱 Mobile Responsiveness */
+@media (max-width: 768px) {
+  .navbar ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+.force-close-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+}
+
+.force-close-btn:hover {
+  background-color: #cc0000;
+  transform: scale(1.05);
+}
+/* Enable smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
