@@ -937,6 +937,11 @@ app.get("/privacy", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "privacy.html"));
 });
 
+// ✅ Public Terms of Service (no auth — same reasoning as /privacy)
+app.get("/terms", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "terms.html"));
+});
+
 // ✅ Logout Route
 app.get("/logout", (req, res) => {
   try {
