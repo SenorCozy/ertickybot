@@ -3,6 +3,7 @@ require("dotenv").config();
 const marked = require("marked");
 const he = require("he");
 const { encryptText } = require("../crypto");
+const { scheduleDeletion, formatEta } = require("../channelDeletionQueue");
 const {
   ActionRowBuilder,
   ButtonBuilder,
@@ -1817,9 +1818,16 @@ async function closeTicket({
             // channel orphaned" production bug impossible. On exhaustion the
             // row stays as status='closed' so `/delete` (or a future
             // reconciler) can finish the cleanup safely.
-            const deleted = await deleteChannelWithRetry(
-              ticketChannel,
-              ticket.id
+            const deleted = await scheduleDeletion(
+              () => deleteChannelWithRetry(ticketChannel, ticket.id),
+              (waitMs) =>
+                ticketChannel.send({
+                  content:
+                    `🕒 This ticket will close automatically in **${formatEta(
+                      waitMs
+                    )}** — staggering channel deletions to avoid tripping ` +
+                    `the server's anti-nuke protection. No action needed.`,
+                })
             );
 
             if (deleted) {

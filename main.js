@@ -32,6 +32,7 @@ const {
 const marked = require("marked");
 const he = require("he");
 const { encryptText, decryptText } = require("./crypto");
+const { scheduleDeletion, formatEta } = require("./channelDeletionQueue");
 
 // Remove all existing listeners for the interactionCreate event
 client.removeAllListeners("interactionCreate");
@@ -1126,14 +1127,22 @@ app.post("/close/:id", async (req, res) => {
               });
             }
 
-            await ticketChannel
-              .delete()
-              .catch((err) =>
-                console.warn(
-                  "⚠️ Channel already deleted or could not delete:",
-                  err
-                )
-              );
+            await scheduleDeletion(
+              () => ticketChannel.delete(),
+              (waitMs) =>
+                ticketChannel.send({
+                  content:
+                    `🕒 This ticket will close automatically in **${formatEta(
+                      waitMs
+                    )}** — staggering channel deletions to avoid tripping ` +
+                    `the server's anti-nuke protection. No action needed.`,
+                })
+            ).catch((err) =>
+              console.warn(
+                "⚠️ Channel already deleted or could not delete:",
+                err
+              )
+            );
           } catch (transcriptErr) {
             console.error(
               "❌ Error generating transcript or deleting channel:",

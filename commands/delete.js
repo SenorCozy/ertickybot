@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, PermissionsBitField } = require("discord.js");
+const { scheduleDeletion, formatEta } = require("../channelDeletionQueue");
 
 require("dotenv").config();
 
@@ -74,11 +75,30 @@ module.exports = {
         });
       }
 
+      // Acknowledge now — deletion itself may be delayed by the shared
+      // anti-nuke-safe queue (see channelDeletionQueue.js), so we can no
+      // longer guarantee this finishes inside Discord's 3-second window.
+      await interaction.reply({
+        content:
+          "✅ Deletion request received — this channel will close shortly.",
+        flags: 64,
+      });
+
       try {
-        await channel.delete();
+        await scheduleDeletion(
+          () => channel.delete(),
+          (waitMs) =>
+            channel.send({
+              content:
+                `🕒 This channel will close automatically in **${formatEta(
+                  waitMs
+                )}** — staggering channel deletions to avoid tripping ` +
+                `the server's anti-nuke protection. No action needed.`,
+            })
+        );
       } catch (deleteErr) {
         console.error("❌ Error deleting ticket channel:", deleteErr);
-        return interaction.reply({
+        return interaction.followUp({
           content: "❌ Failed to delete the ticket channel.",
           flags: 64,
         });
